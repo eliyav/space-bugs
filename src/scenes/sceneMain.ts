@@ -1,31 +1,53 @@
 import Phaser from "phaser";
 import shipImg from "../assets/ship.png";
-import orb1 from "../assets/orb1.png";
-import orb2 from "../assets/orb2.png";
-import orb3 from "../assets/orb3.png";
+import orb1Img from "../assets/orb1.png";
+import orb2Img from "../assets/orb2.png";
+import orb3Img from "../assets/orb3.png";
 import Box from "./components/box";
+import ImageBody from "./components/image-body";
 
 let boxes: Box[] = [];
 
 class SceneMain extends Phaser.Scene {
+  middleW: number;
+  middleH: number;
+
   constructor() {
     super("SceneMain");
+    this.middleW = window.innerWidth / 2;
+    this.middleH = window.innerHeight / 2;
   }
   preload() {
     this.load.image("ship", shipImg);
-    this.load.image("orb1", orb1);
-    this.load.image("orb2", orb2);
-    this.load.image("orb3", orb3);
+    this.load.image("orb1", orb1Img);
+    this.load.image("orb2", orb2Img);
+    this.load.image("orb3", orb3Img);
   }
   create() {
+    const curScene = this.scene.scene;
+    this.scene.scene.scale.lockOrientation("landscape");
     console.log("Main Scene created");
-    const middleW = window.innerWidth / 2;
-    const middleH = window.innerHeight / 2;
 
-    // var r2 = this.matter.add.image(middleW, middleH, "orb1");
+    this.matter.world.setBounds(
+      0,
+      0,
+      window.innerWidth,
+      window.innerHeight,
+      64
+    );
+
+    const orb1 = new ImageBody(curScene, this.middleW, this.middleH, "orb1");
+    orb1.setBoundingBox(0.2, "circle", { radius: 40 });
+    orb1.setInfinity();
+    orb1.body.setVelocity(5);
+
+    const orb2 = new ImageBody(curScene, this.middleW, this.middleH, "orb1");
+    orb2.setBoundingBox(0.2, "circle", { radius: 40 });
+    orb2.setInfinity();
+    orb2.body.setVelocity(-5);
 
     //Create camera
-    const camera = this.scene.scene.cameras.cameras[0];
+    const camera = curScene.cameras.cameras[0];
     //camera.startFollow(ship);
 
     //Create Movement
@@ -67,14 +89,11 @@ class SceneMain extends Phaser.Scene {
     movementKeys.left?.on("down", () => {});
   }
 
-  update() {
-    if (this.input.activePointer.isDown) {
-      const worldX = this.input.activePointer.worldX;
-      const worldY = this.input.activePointer.worldY;
-      boxes.push(new Box(this.scene.scene, worldX, worldY, 100, 100, 0x6666ff));
-    }
-    boxes.forEach((box) => box.update());
+  toDegrees(angle: number) {
+    return angle * (180 / Math.PI);
   }
+
+  update() {}
 }
 
 export default SceneMain;

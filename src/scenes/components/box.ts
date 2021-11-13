@@ -1,14 +1,22 @@
-import Phaser, { Physics } from "phaser";
+import Phaser from "phaser";
 
 export default class Box {
   scene: any;
-  x: any;
-  y: any;
-  w: any;
-  h: any;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
   box: Phaser.GameObjects.Rectangle;
-  physics: any;
-  constructor(scene, x, y, w, h, fill) {
+  physics: MatterJS.BodyType;
+
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    fill: number
+  ) {
     this.scene = scene;
     this.x = x;
     this.y = y;
@@ -25,9 +33,6 @@ export default class Box {
     this.physics = scene.matter.add.rectangle(this.x, this.y, this.w, this.h);
   }
 
-  toDegrees(angle: number) {
-    return angle * (180 / Math.PI);
-  }
   update() {
     this.box.x = this.physics.position.x;
     this.box.y = this.physics.position.y;

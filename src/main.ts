@@ -8,9 +8,13 @@ let game;
 window.onload = function () {
   let config = {
       type: Phaser.AUTO,
+      parent: "phaser-game",
       width: window.innerWidth,
       height: window.innerHeight,
-      parent: "phaser-game",
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
       physics: {
         default: "matter",
         matter: {
@@ -24,5 +28,6 @@ window.onload = function () {
       scene: [SceneMain, SceneOver],
     },
     // scene: [SceneLoad, SceneTitle, SceneMain, SceneOver],
+
     game = new Phaser.Game(config);
 };
